@@ -1,0 +1,61 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "answer my question",
+      "intents": [
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AnswerIntent",
+          "slots": [
+            {
+              "name": "tag",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "what is {tag}",
+            "read off {tag}",
+            "answer with {tag}",
+            "talk about {tag}",
+            "respond to {tag}",
+            "answer {tag}"
+          ]
+        },
+        {
+          "name": "ReadTags",
+          "samples": [
+            "read off my questions",
+            "read off the questions",
+            "read off my tags",
+            "read off the tags",
+            "what are my possible questions",
+            "what are the possible questions",
+            "what are the questions",
+            "what are my questions",
+            "read all my questions",
+            "what are my possible tags",
+            "what are the possible tags",
+            "what are the tags",
+            "what are my tags",
+            "read all my tags"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.f9ebd6c1-4743-40b5-acfe-8a1bad2d8c33",
+      "was_cloned": false,
+      "resources": {
+        "manifest": {
+          "eTag": "82186b1cb8c066a6b03613deff069933"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "cfaceaefc0c6a2df4630d06d9a8105d3"
+          }
+        },
+        "lambda": [
+          {
+            "arn": "arn:aws:lambda:us-east-1:955503089834:function:ClassroomQandA",
+            "awsRegion": "us-east-1",
+            "functionName": "ClassroomQandA",
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "revisionId": "86416e68-5a9e-4706-a9f4-a9551f9467cb"
+          }
+        ]
+      },
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "arn:aws:lambda:us-east-1:955503089834:function:ClassroomQandA"
+              }
+            }
+          }
+        }
+      },
+      "in_skill_products": []
+    }
+  }
+}
