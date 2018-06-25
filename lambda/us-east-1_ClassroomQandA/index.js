@@ -4,31 +4,37 @@ const handlers = {
 
     'LaunchRequest': function () {
 
-
+        const speechOutput = 'Welcome to classroom Q and A. You can provide me with a tag for your question or ask me to read off your tags.';
+        this.response.speak(speechOutput).listen('You can provide me with a tag for your question or ask me to read off your tags.');
+        this.emit(':responseReady');
 
     },
 
     'Unhandled': function () {
 
-
+        const speechOutput = 'I\'m sorry, I didn\'t catch that. You can provide me with a tag for your question or ask me to read off your tags.';
+        this.response.speak(speechOutput).listen('You can provide me with a tag for your question or ask me to read off your tags.');
+        this.emit(':responseReady');
 
     },
 
     'AMAZON.CancelIntent': function () {
 
-
+        const speechOutput = 'Now exiting the classroom Q and A skill. Goodbye.';
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
 
     },
 
     'SessionEndedRequest': function () {
 
-
+        this.emit(':saveState', true);
 
     },
 
     'AnswerIntent': function () {
 
-
+        const tag = this.event.request.intent.slots.tag.value;
 
     },
 
