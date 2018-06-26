@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "answer my question",
+      "invocationName": "answer bot",
       "intents": [
         {
           "name": "AMAZON.FallbackIntent",
@@ -28,6 +28,9 @@
             }
           ],
           "samples": [
+            "answer with the {tag}",
+            "what is the {tag}",
+            "talk about the {tag}",
             "what is {tag}",
             "read off {tag}",
             "answer with {tag}",

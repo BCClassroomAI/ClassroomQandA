@@ -51,7 +51,7 @@ const handlers = {
 
         let speechOutput = '';
         const tagList = Object.keys(tagAnswers);
-        tagList.forEach(tag => speechOutput += tag);
+        tagList.forEach(tag => speechOutput += (tag + '; '));
         this.response.speak(speechOutput);
         this.emit(':responseReady');
 
