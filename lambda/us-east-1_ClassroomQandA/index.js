@@ -1,5 +1,11 @@
 /* Classroom Q&A Skill */
 
+const tagAnswers = {
+    "Gettysburg": "Gettysburg is a town in Pennsylvania that is known as a turning point in the Civil War. Bazinga!",
+    "pythagorean theorem": "A squared plus B squared equals C squared in the case of all right triangles. Bazinga!",
+    "passive voice": "Passive voice is a mode of verb where the subject is acted on by the verb. Bazinga!"
+};
+
 const handlers = {
 
     'LaunchRequest': function () {
@@ -35,12 +41,19 @@ const handlers = {
     'AnswerIntent': function () {
 
         const tag = this.event.request.intent.slots.tag.value;
+        const speechOutput = tagAnswers[tag];
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
 
     },
 
     'ReadTags': function () {
 
-
+        let speechOutput = '';
+        const tagList = Object.keys(tagAnswers);
+        tagList.forEach(tag => speechOutput += tag);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
 
     }
 
