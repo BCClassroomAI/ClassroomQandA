@@ -1,68 +1,117 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "answer bot",
-      "intents": [
-        {
-          "name": "AMAZON.FallbackIntent",
-          "samples": []
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "answer bot",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AnswerIntent",
+                    "slots": [
+                        {
+                            "name": "tag",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{tag}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "provide an answer",
+                        "discuss something",
+                        "talk about something",
+                        "answer my question",
+                        "give an answer",
+                        "answer with the {tag}",
+                        "what is the {tag}",
+                        "talk about the {tag}",
+                        "what is {tag}",
+                        "read off {tag}",
+                        "answer with {tag}",
+                        "talk about {tag}",
+                        "respond to {tag}",
+                        "answer {tag}"
+                    ]
+                },
+                {
+                    "name": "ReadTags",
+                    "slots": [],
+                    "samples": [
+                        "read off my questions",
+                        "read off all my questions",
+                        "read off the questions",
+                        "read off all the questions",
+                        "read off my tags",
+                        "read off all my tags",
+                        "read off the tags",
+                        "read off all the tags",
+                        "what are my possible questions",
+                        "what are the possible questions",
+                        "what are the questions",
+                        "what are my questions",
+                        "read all my questions",
+                        "what are my possible tags",
+                        "what are the possible tags",
+                        "what are the tags",
+                        "what are my tags",
+                        "read all my tags"
+                    ]
+                }
+            ],
+            "types": []
         },
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
+        "dialog": {
+            "intents": [
+                {
+                    "name": "AnswerIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "tag",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1250222103105.593239190591"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "AnswerIntent",
-          "slots": [
+        "prompts": [
             {
-              "name": "tag",
-              "type": "AMAZON.SearchQuery"
+                "id": "Elicit.Slot.1250222103105.593239190591",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What tag would you like me to talk about?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your tag?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What tag would you like to use?"
+                    }
+                ]
             }
-          ],
-          "samples": [
-            "answer with the {tag}",
-            "what is the {tag}",
-            "talk about the {tag}",
-            "what is {tag}",
-            "read off {tag}",
-            "answer with {tag}",
-            "talk about {tag}",
-            "respond to {tag}",
-            "answer {tag}"
-          ]
-        },
-        {
-          "name": "ReadTags",
-          "samples": [
-            "read off my questions",
-            "read off all my questions",
-            "read off the questions",
-            "read off all the questions",
-            "read off my tags",
-            "read off all my tags",
-            "read off the tags",
-            "read off all the tags",
-            "what are my possible questions",
-            "what are the possible questions",
-            "what are the questions",
-            "what are my questions",
-            "read all my questions",
-            "what are my possible tags",
-            "what are the possible tags",
-            "what are the tags",
-            "what are my tags",
-            "read all my tags"
-          ]
-        }
-      ]
+        ]
     }
-  }
 }
