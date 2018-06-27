@@ -1,12 +1,12 @@
 /* Classroom Q&A Skill */
 
 const tagAnswers = {
-    "Gettysburg": "Gettysburg is a town in Pennsylvania that is known as a turning point in the Civil War. Bazinga!",
-    "pythagorean theorem": "A squared plus B squared equals C squared in the case of all right triangles. Bazinga!",
-    "passive voice": "Passive voice is a mode of verb where the subject is acted on by the verb. Bazinga!",
-    "your strengths": "Here are my strengths. The teacher has a smaller burden in remembering items and I can ease the exhaustion " +
-        "of providing repetitive briefings and directions. I bring a dynamic element to the classroom to help facilitate conversation " +
-        "and engage students."
+    "Gettysburg": 'Gettysburg is a town in Pennsylvania that is known as a turning point in the Civil War. Bazinga!',
+    "pythagorean theorem": 'A squared plus B squared equals C squared in the case of all right triangles. Bazinga!',
+    "passive voice": 'Passive voice is a mode of verb where the subject is acted on by the verb. Bazinga!',
+    "your strengths": 'Here are my strengths. The teacher has a smaller burden in remembering items, and I can ease the exhaustion of providing ' +
+        'repetitive briefings and directions.' + '<break time = "1s"/>' + 'I bring a dynamic element to the classroom to help facilitate conversation ' +
+        'and engage students.'
 };
 
 const handlers = {
