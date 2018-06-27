@@ -40,10 +40,24 @@ const handlers = {
 
     'AnswerIntent': function () {
 
-        const tag = this.event.request.intent.slots.tag.value;
-        const speechOutput = tagAnswers[tag];
-        this.response.speak(speechOutput);
-        this.emit(':responseReady');
+        if (!this.event.request.intent.slots.tag.value) {
+
+            this.emit(':delegate');
+
+        } else if (!tagAnswers.hasOwnProperty(this.event.request.intent.slots.tag.value)) {
+
+            const slotToElicit = 'tag';
+            const speechOutput = 'I\'m sorry, that tag doesn\'t currently exist. Could you provide another tag?';
+            this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
+
+        } else {
+
+            const tag = this.event.request.intent.slots.tag.value;
+            const speechOutput = tagAnswers[tag];
+            this.response.speak(speechOutput);
+            this.emit(':responseReady');
+
+        }
 
     },
 
