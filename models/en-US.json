@@ -43,9 +43,13 @@
           "name": "ReadTags",
           "samples": [
             "read off my questions",
+            "read off all my questions",
             "read off the questions",
+            "read off all the questions",
             "read off my tags",
+            "read off all my tags",
             "read off the tags",
+            "read off all the tags",
             "what are my possible questions",
             "what are the possible questions",
             "what are the questions",

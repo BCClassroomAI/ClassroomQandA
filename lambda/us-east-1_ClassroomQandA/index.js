@@ -51,8 +51,14 @@ const handlers = {
 
         let speechOutput = '';
         const tagList = Object.keys(tagAnswers);
-        tagList.forEach(tag => speechOutput += (tag + '; '));
-        this.response.speak(speechOutput);
+        tagList.forEach(function (tag) {
+            if (tagList.indexOf(tag) === tagList.length - 1) {
+                speechOutput += ('and ' + tag);
+            } else {
+                speechOutput += (tag + '; ');
+            }
+        });
+        this.response.speak('Your current tags are: ' + speechOutput);
         this.emit(':responseReady');
 
     }
