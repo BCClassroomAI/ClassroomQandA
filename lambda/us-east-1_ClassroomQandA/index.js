@@ -99,15 +99,12 @@ function getData(auth) {
       console.log("Google Sheets Read - Success");
       let sheets = data.data.sheets;
       sheets.forEach(sheet => {
-        allQuestions[sheet.title] = [];
+        allQuestions[sheet.title] = {};
         //omit element 0 because it's the header row
         let rows = sheet.data[0].rowData.splice(1);
         rows.forEach(row => {
           if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
-            allQuestions[sheet.title].push({
-              tag: row.values[0].effectiveValue.stringValue,
-              answer: row.values[1].effectiveValue.stringValue
-            })
+            allQuestions[sheet.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
           } else {
             console.log("That row didn't have both a tag and an answer");
           }
@@ -187,12 +184,17 @@ const handlers = {
 
     'AnswerIntent': function () {
 
-      if (!this.event.request.intent.slots.tag.value) {
+      if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
 
         this.emit(':delegate');
 
-        //we should also be getting a course number
-      } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.tag.value)) {
+      } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.courseNumber.value)) {
+
+        const slotToElicit = 'courseNumber';
+        const speechOutput = "I'm sorry, we couldn't find any data for that course number. Try again";
+        this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
+
+      } else if (!allQuestions[this.event.request.intent.slots.courseNumber.value].hasOwnProperty(this.event.request.intent.slots.tag.value)) {
 
         const slotToElicit = 'tag';
         const speechOutput = 'I\'m sorry, that tag doesn\'t currently exist. Could you provide another tag?';
@@ -201,29 +203,35 @@ const handlers = {
       } else {
 
         const tag = this.event.request.intent.slots.tag.value;
-        const speechOutput = allQuestions[tag];
+        const courseNumber = this.event.request.intent.slots.courseNumber.value;
+
+        const speechOutput = allQuestions[courseNumber][tag];
         this.response.speak(speechOutput);
         this.emit(':responseReady');
 
       }
 
-
     },
 
     'ReadTags': function () {
 
-      let speechOutput = '';
-      allQuestions["Sheet1"].forEach(question => {
-        if (allQuestions["Sheet1"].indexOf(question) === allQuestions["Sheet1"].length - 1) {
-          speechOutput += ('and' + question.tag);
-        } else {
-          speechOutput += (question.tag + "; ");
-        }
-      });
+      if (!this.event.request.intent.slots.courseNumber.value) {
+        this.emit(':delegate');
+      } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.courseNumber.value)) {
+        const slotToElicit = 'courseNumber';
+        const speechOutput = "We couldn't find that course number. Please try agian.";
+        this.emit(':elicitiSlot', slotToElicit, speechOutput, speechOutput);
+      } else {
+        let speechOutput = '';
+        const courseNumber = this.event.request.intent.slots.courseNumber.value;
+        allQuestions[courseNumber].forEach(question => {
+          speechOutput += (question.tag + ", ");
+        });
 
-      this.response.speak('Your current tags are: ' + speechOutput);
-      this.emit(':responseReady');
+        this.response.speak('Your current tags are: ' + speechOutput);
+        this.emit(':responseReady');
 
+      }
     }
 
 };
