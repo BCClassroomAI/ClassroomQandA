@@ -23,6 +23,15 @@
                     "name": "AnswerIntent",
                     "slots": [
                         {
+                            "name": "courseNumber",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "for {courseNumber}",
+                                "{courseNumber}",
+                                "course {courseNumber}"
+                            ]
+                        },
+                        {
                             "name": "tag",
                             "type": "AMAZON.SearchQuery",
                             "samples": [
@@ -49,7 +58,17 @@
                 },
                 {
                     "name": "ReadTags",
-                    "slots": [],
+                    "slots": [
+                        {
+                            "name": "courseNumber",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "samples": [
+                                "course {courseNumber}",
+                                "{courseNumber}",
+                                "for {courseNumber}"
+                            ]
+                        }
+                    ],
                     "samples": [
                         "read off my questions",
                         "read off all my questions",
@@ -82,12 +101,37 @@
                     "prompts": {},
                     "slots": [
                         {
+                            "name": "courseNumber",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.10171930131.884624945249"
+                            }
+                        },
+                        {
                             "name": "tag",
                             "type": "AMAZON.SearchQuery",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.1250222103105.593239190591"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ReadTags",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "courseNumber",
+                            "type": "AMAZON.FOUR_DIGIT_NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.693285471643.256993100672"
                             }
                         }
                     ]
@@ -109,6 +153,24 @@
                     {
                         "type": "PlainText",
                         "value": "What tag would you like to use?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.10171930131.884624945249",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "for what course number?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.693285471643.256993100672",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "for what course number?"
                     }
                 ]
             }
