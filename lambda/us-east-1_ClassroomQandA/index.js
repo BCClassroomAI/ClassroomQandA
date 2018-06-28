@@ -6,11 +6,10 @@ AWS.config.update({region: 'us-east-1'});
 
 exports.handler = function(event, context, callback) {
   const alexa = Alexa.handler(event, context, callback);
-  alexa.appId = 'amzn1.ask.skill.f9ebd6c1-4743-40b5-acfe-8a1bad2d8c33';
-  alexa.dynamoDBTableName = 'ClassroomQandA';
   alexa.registerHandlers(handlers);
   alexa.execute();
 };
+
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
@@ -22,11 +21,13 @@ const TOKEN_PATH = 'credentials.json';
 let allQuestions = {};
 
 // Load client secrets from a local file.
-fs.readFile('client_secret.json', (err, content) => {
-  if (err) return console.log('Error loading client secret file:', err);
-  // Authorize a client with credentials, then call the Google Sheets API.
-  authorize(JSON.parse(content), getData);
-});
+function readFromSheets() {
+  fs.readFile('client_secret.json', (err, content) => {
+    if (err) return console.log('Error loading client secret file:', err);
+    // Authorize a client with credentials, then call the Google Sheets API.
+    authorize(JSON.parse(content), getData);
+  });
+}
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -183,6 +184,9 @@ const handlers = {
     },
 
     'AnswerIntent': function () {
+
+      console.log("Length of allQuestions: " + allQuestions.length);
+      console.log(allQuestions["1111"]["Gettysburg"]);
 
       if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
 
