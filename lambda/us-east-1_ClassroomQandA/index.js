@@ -181,14 +181,15 @@ const handlers = {
 
         console.log("*** AnswerIntent Started");
         let allQuestions = {};
-        loadFromSheets().then((auth) => {
+        let loadPromise = loadFromSheets();
+        loadPromise.then((auth) => {
             getData(auth)
                 .then(
                     (data) => {
                         console.log("Google Sheets Read - Success");
                         let sheets = data.data.sheets;
                         sheets.forEach(sheet => {
-                            allQuestions[sheet.title] = {};
+                            allQuestions[sheet.properties.title] = {};
                             //omit element 0 because it's the header row
                             let rows = sheet.data[0].rowData.splice(1);
                             rows.forEach(row => {
@@ -200,7 +201,7 @@ const handlers = {
                             });
                         });
 
-                        console.log("Length of allQuestions: " + allQuestions.length);
+                        console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
                         console.log(allQuestions["1111"]["Gettysburg"]);
 
                         if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
@@ -233,7 +234,8 @@ const handlers = {
             (err) => {
                 console.log("Help this shouldn't have happened. We're in trouble.");
             }
-        )
+        );
+        return loadPromise;
     },
 
     'ReadTags': function () {
