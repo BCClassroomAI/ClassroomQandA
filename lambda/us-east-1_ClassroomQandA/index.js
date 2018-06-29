@@ -177,65 +177,56 @@ const handlers = {
 
     },
 
-    'AnswerIntent': function () {
+    'AnswerIntent': async function () {
 
         console.log("*** AnswerIntent Started");
         let allQuestions = {};
         let loadPromise = loadFromSheets();
-        loadPromise.then((auth) => {
-            getData(auth)
-                .then(
-                    (data) => {
-                        console.log("Google Sheets Read - Success");
-                        let sheets = data.data.sheets;
-                        sheets.forEach(sheet => {
-                            allQuestions[sheet.properties.title] = {};
-                            //omit element 0 because it's the header row
-                            let rows = sheet.data[0].rowData.splice(1);
-                            rows.forEach(row => {
-                                if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
-                                    allQuestions[sheet.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
-                                } else {
-                                    console.log("That row didn't have both a tag and an answer");
-                                }
-                            });
-                        });
+        let auth = await loadPromise;
+        let data = await getData(auth);
+        console.log("Google Sheets Read - Success");
+        let sheets = data.data.sheets;
+        sheets.forEach(sheet => {
+            allQuestions[sheet.properties.title] = {};
+            //omit element 0 because it's the header row
+            let rows = sheet.data[0].rowData.splice(1);
+            rows.forEach(row => {
+                if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
+                    allQuestions[sheet.properties.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
+                } else {
+                    console.log("That row didn't have both a tag and an answer");
+                }
+            });
+        });
 
-                        console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
-                        console.log(allQuestions["1111"]["Gettysburg"]);
+        console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
+        console.log(allQuestions["1111"]["Gettysburg"]);
 
-                        if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
+        if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
 
-                            this.emit(':delegate');
+            this.emit(':delegate');
 
-                        } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.courseNumber.value)) {
+        } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.courseNumber.value)) {
 
-                            const slotToElicit = 'courseNumber';
-                            const speechOutput = "I'm sorry, we couldn't find any data for that course number. Try again";
-                            this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
+            const slotToElicit = 'courseNumber';
+            const speechOutput = "I'm sorry, we couldn't find any data for that course number. Try again";
+            this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
 
-                        } else if (!allQuestions[this.event.request.intent.slots.courseNumber.value].hasOwnProperty(this.event.request.intent.slots.tag.value)) {
+        } else if (!allQuestions[this.event.request.intent.slots.courseNumber.value].hasOwnProperty(this.event.request.intent.slots.tag.value)) {
 
-                            const slotToElicit = 'tag';
-                            const speechOutput = 'I\'m sorry, that tag doesn\'t currently exist. Could you provide another tag?';
-                            this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
+            const slotToElicit = 'tag';
+            const speechOutput = 'I\'m sorry, that tag doesn\'t currently exist. Could you provide another tag?';
+            this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
 
-                        } else {
+        } else {
 
-                            const tag = this.event.request.intent.slots.tag.value;
-                            const courseNumber = this.event.request.intent.slots.courseNumber.value;
+            const tag = this.event.request.intent.slots.tag.value;
+            const courseNumber = this.event.request.intent.slots.courseNumber.value;
 
-                            const speechOutput = allQuestions[courseNumber][tag];
-                            this.response.speak(speechOutput);
-                            this.emit(':responseReady');
-                        }
-                    })
-            },
-            (err) => {
-                console.log("Help this shouldn't have happened. We're in trouble.");
-            }
-        );
-        return loadPromise;
+            const speechOutput = allQuestions[courseNumber][tag];
+            this.response.speak(speechOutput);
+            this.emit(':responseReady');
+        }
     },
 
     'ReadTags': function () {
