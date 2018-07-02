@@ -6,4 +6,3 @@ config
 RollCall.zip
 local-event.json
 .DS_Store
-node_modules
