@@ -14,7 +14,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "npm-update": "npm install",
+    "ask-deploy": "cd ../..;ask deploy"
   },
   "author": "",
   "license": "ISC"
