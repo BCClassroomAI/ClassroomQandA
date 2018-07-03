@@ -148,7 +148,6 @@ function getData(auth) {
 const handlers = {
 
     'LaunchRequest': function () {
-
         const speechOutput = 'Welcome to classroom Q and A. You can provide me with a tag for your question or ask me to read off your tags.';
         this.response.speak(speechOutput).listen('You can provide me with a tag for your question or ask me to read off your tags.');
         this.emit(':responseReady');
@@ -156,7 +155,6 @@ const handlers = {
     },
 
     'Unhandled': function () {
-
         const speechOutput = 'I\'m sorry, I didn\'t catch that. You can provide me with a tag for your question or ask me to read off your tags.';
         this.response.speak(speechOutput).listen('You can provide me with a tag for your question or ask me to read off your tags.');
         this.emit(':responseReady');
@@ -164,7 +162,6 @@ const handlers = {
     },
 
     'AMAZON.CancelIntent': function () {
-
         const speechOutput = 'Now exiting the classroom Q and A skill. Goodbye.';
         this.response.speak(speechOutput);
         this.emit(':responseReady');
@@ -172,13 +169,11 @@ const handlers = {
     },
 
     'SessionEndedRequest': function () {
-
         this.emit(':saveState', true);
 
     },
 
     'AnswerIntent': async function () {
-
         console.log("*** AnswerIntent Started");
         let allQuestions = {};
         let loadPromise = loadFromSheets();
