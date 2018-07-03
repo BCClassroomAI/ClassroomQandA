@@ -186,10 +186,14 @@ const handlers = {
             //omit element 0 because it's the header row
             let rows = sheet.data[0].rowData.splice(1);
             rows.forEach(row => {
-                if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
-                    allQuestions[sheet.properties.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
+                if (row.values) {
+                    if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
+                        allQuestions[sheet.properties.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
+                    } else {
+                        console.log("That row didn't have both a tag and an answer");
+                    }
                 } else {
-                    console.log("That row didn't have both a tag and an answer");
+                    console.log("Skipping empty row.");
                 }
             });
         });
