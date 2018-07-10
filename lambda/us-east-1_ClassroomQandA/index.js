@@ -205,23 +205,34 @@ const handlers = {
         profSchedule[scheduleSheet.properties.title] = {};
         let rows = scheduleSheet.data[0].rowData.slice(1);
         let headers = scheduleSheet.data[0].rowData[0];
+        let isMissingValue = false;
         rows.forEach(row => {
             if (row.values) {
+                let speechOutput;
                 if (row.values[0].effectiveValue) {
                     profSchedule[scheduleSheet.properties.title][row.values[0].effectiveValue.stringValue] = {};
                 }
-                row.values.forEach(column => {
-                    if (!column.effectiveValue) {
-                        console.log(`Exception: missing value in ${headers.values[row.values.indexOf(column)].effectiveValue.stringValue} column.`);
+                row.values.forEach(cell => {
+                    if (!cell.effectiveValue) {
+                        console.log(`Exception: missing value in ${headers.values[row.values.indexOf(cell)].effectiveValue.stringValue} column.`);
+                        speechOutput = `I'm sorry, there is a missing value in the '${headers.values[row.values.indexOf(cell)].effectiveValue.stringValue}' column.`;
+                        isMissingValue = true;
                     }
                 });
-                profSchedule[scheduleSheet.properties.title][(row.values[1].effectiveValue.stringValue).substr(0, 4)][row.values[1].effectiveValue.stringValue] = {
-                    "dayOfWeek": row.values[2].effectiveValue.stringValue,
-                    "start": row.values[3].effectiveValue.stringValue,
-                    "end": row.values[4].effectiveValue.stringValue
-                };
+                if (!isMissingValue) {
+                    console.log(JSON.stringify(row.values));
+                    profSchedule[scheduleSheet.properties.title][row.values[1].effectiveValue.stringValue.substr(0, 4)][row.values[1].effectiveValue.stringValue] = {
+                        "dayOfWeek": row.values[2].effectiveValue.stringValue,
+                        "start": row.values[3].effectiveValue.numberValue,
+                        "end": row.values[4].effectiveValue.numberValue
+                    };
+                } else {
+                    this.response.speak(speechOutput);
+                    this.emit(':responseReady');
+                }
             }
         });
+        console.log(JSON.stringify(profSchedule));
 
         console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
 
