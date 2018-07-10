@@ -210,9 +210,9 @@ const handlers = {
                 if (row.values[0].effectiveValue) {
                     profSchedule[scheduleSheet.properties.title][row.values[0].effectiveValue.stringValue] = {};
                 }
-                row.values.forEach(column => {
-                    if (!column.effectiveValue) {
-                        console.log(`Exception: missing value in ${headers.values[row.values.indexOf(column)].effectiveValue.stringValue} column.`);
+                row.values.forEach(cell => {
+                    if (!cell.effectiveValue) {
+                        console.log(`Exception: missing value in ${headers.values[row.values.indexOf(cell)].effectiveValue.stringValue} column.`);
                     }
                 });
                 profSchedule[scheduleSheet.properties.title][(row.values[1].effectiveValue.stringValue).substr(0, 4)][row.values[1].effectiveValue.stringValue] = {
@@ -220,6 +220,7 @@ const handlers = {
                     "start": row.values[3].effectiveValue.stringValue,
                     "end": row.values[4].effectiveValue.stringValue
                 };
+                console.log(JSON.stringify(profSchedule));
             }
         });
 
