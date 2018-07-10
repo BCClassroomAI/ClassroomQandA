@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "alexa-sdk": "^1.0.25",
-    "aws-sdk": "^2.266.1",
+    "aws-sdk": "^2.267.1",
     "googleapis": "^32.0.0",
     "hashmap": "^2.3.0",
     "lambda-local": "^1.5.1",

@@ -154,8 +154,8 @@ const handlers = {
 
     },
 
-    'Unhandled': function () {
-        const speechOutput = 'I\'m sorry, I didn\'t catch that. You can provide me with a tag for your question or ask me to read off your tags.';
+    'AMAZON.FallbackIntent': function () {
+        const speechOutput = "I'm sorry, I didn't catch that. You can provide me with a tag for your question or ask me to read off your tags.";
         this.response.speak(speechOutput).listen('You can provide me with a tag for your question or ask me to read off your tags.');
         this.emit(':responseReady');
 
@@ -184,7 +184,7 @@ const handlers = {
         sheets.forEach(sheet => {
             allQuestions[sheet.properties.title] = {};
             //omit element 0 because it's the header row
-            let rows = sheet.data[0].rowData.splice(1);
+            let rows = sheet.data[0].rowData.slice(1);
             rows.forEach(row => {
                 if (row.values) {
                     if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
@@ -199,29 +199,24 @@ const handlers = {
         });
 
         console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
-        console.log(allQuestions["1111"]["Gettysburg"]);
+        console.log(allQuestions["1111"]["Tag"]);
 
-        if (!this.event.request.intent.slots.tag.value || !this.event.request.intent.slots.courseNumber.value) {
-
+        if (this.event.request.dialogState !== 'COMPLETED') {
             this.emit(':delegate');
 
         } else if (!allQuestions.hasOwnProperty(this.event.request.intent.slots.courseNumber.value)) {
-
             const slotToElicit = 'courseNumber';
             const speechOutput = "I'm sorry, we couldn't find any data for that course number. Try again";
             this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
 
         } else if (!allQuestions[this.event.request.intent.slots.courseNumber.value].hasOwnProperty(this.event.request.intent.slots.tag.value)) {
-
             const slotToElicit = 'tag';
             const speechOutput = 'I\'m sorry, that tag doesn\'t currently exist. Could you provide another tag?';
             this.emit(':elicitSlot', slotToElicit, speechOutput, speechOutput);
 
         } else {
-
             const tag = this.event.request.intent.slots.tag.value;
             const courseNumber = this.event.request.intent.slots.courseNumber.value;
-
             const speechOutput = allQuestions[courseNumber][tag];
             this.response.speak(speechOutput);
             this.emit(':responseReady');
