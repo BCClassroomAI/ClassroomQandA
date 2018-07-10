@@ -230,11 +230,11 @@ const handlers = {
                     this.response.speak(speechOutput);
                     this.emit(':responseReady');
                 }
+                console.log(JSON.stringify(profSchedule));
             }
         });
-        console.log(JSON.stringify(profSchedule));
 
-        console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
+        console.log(JSON.stringify(profSchedule));
 
         if (this.event.request.dialogState !== 'COMPLETED') {
             this.emit(':delegate');
