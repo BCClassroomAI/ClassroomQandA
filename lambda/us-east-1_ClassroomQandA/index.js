@@ -180,14 +180,16 @@ const handlers = {
         let auth = await loadPromise;
         let data = await getData(auth);
         console.log("Google Sheets Read - Success");
-        let sheets = data.data.sheets;
-        sheets.forEach(sheet => {
+
+        let skillsSheets = data.data.sheets.slice(1);
+        skillsSheets.forEach(sheet => {
             allQuestions[sheet.properties.title] = {};
             //omit element 0 because it's the header row
             let rows = sheet.data[0].rowData.slice(1);
             rows.forEach(row => {
                 if (row.values) {
                     if (row.values[0].effectiveValue && row.values[1].effectiveValue) {
+                        // Sets tag (first column) as key in empty object and sets question (second column) as value
                         allQuestions[sheet.properties.title][row.values[0].effectiveValue.stringValue] = row.values[1].effectiveValue.stringValue;
                     } else {
                         console.log("That row didn't have both a tag and an answer");
@@ -198,8 +200,30 @@ const handlers = {
             });
         });
 
+        let scheduleSheet = data.data.sheets[0];
+        let profSchedule = {};
+        profSchedule[scheduleSheet.properties.title] = {};
+        let rows = scheduleSheet.data[0].rowData.slice(1);
+        let headers = scheduleSheet.data[0].rowData[0];
+        rows.forEach(row => {
+            if (row.values) {
+                if (row.values[0].effectiveValue) {
+                    profSchedule[scheduleSheet.properties.title][row.values[0].effectiveValue.stringValue] = {};
+                }
+                row.values.forEach(column => {
+                    if (!column.effectiveValue) {
+                        console.log(`Exception: missing value in ${headers.values[row.values.indexOf(column)].effectiveValue.stringValue} column.`);
+                    }
+                });
+                profSchedule[scheduleSheet.properties.title][(row.values[1].effectiveValue.stringValue).substr(0, 4)][row.values[1].effectiveValue.stringValue] = {
+                    "dayOfWeek": row.values[2].effectiveValue.stringValue,
+                    "start": row.values[3].effectiveValue.stringValue,
+                    "end": row.values[4].effectiveValue.stringValue
+                };
+            }
+        });
+
         console.log("Length of allQuestions: " + Object.keys(allQuestions).length);
-        console.log(allQuestions["1111"]["Tag"]);
 
         if (this.event.request.dialogState !== 'COMPLETED') {
             this.emit(':delegate');
