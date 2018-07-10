@@ -40,6 +40,7 @@
                         }
                     ],
                     "samples": [
+                        "tell me about {tag}",
                         "provide an answer",
                         "discuss something",
                         "talk about something",
