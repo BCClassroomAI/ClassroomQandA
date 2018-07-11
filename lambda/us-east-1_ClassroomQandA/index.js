@@ -145,6 +145,77 @@ function getData(auth) {
     //   })
 }
 
+function convertDayOfWeek(day) {
+	let dayInitial;
+	switch (day) {
+		case 'Mon':
+			dayInitial = 'M';
+			break;
+		case 'Tue':
+			dayInitial = 'T';
+			break;
+		case 'Wed':
+			dayInitial = 'W';
+			break;
+		case 'Thu':
+			dayInitial = 'R';
+			break;
+		case 'Fri':
+			dayInitial = 'F';
+			break;
+		case 'Sat':
+			dayInitial = 'A';
+			break;
+		case 'Sun':
+			dayInitial = 'U';
+			break;
+		default:
+			break;
+	}
+	return dayInitial;
+}
+
+function convertTimeStamp(timeStamp) {
+	let timeFraction;
+	let timeList = timeStamp.split(':').map(time => parseInt(time));
+	timeFraction = (timeList[0] * 3600 + timeList[1] * 60 + timeList[2]) / (3600 * 24);
+	return timeFraction;
+}
+
+function checkSchedule(scheduleObj) {
+    let dateTime = Date(Date.now());
+    let dateTimeList = dateTime.split(' ');
+    let dayOfWeek = convertDayOfWeek(dateTimeList[0]);
+    let timeStamp = convertTimeStamp(dateTimeList[4]);
+    let courseNumbers = Object.keys(scheduleObj);
+    let gracePeriod = 300/(3600 * 24);
+
+    for (let i = 0; i < courseNumbers.length; i++) {
+        let sectionNumbers = Object.keys(scheduleObj[courseNumbers[i]]);
+        for (let j = 0; j < sectionNumbers.length; j++) {
+            let sectionObj = scheduleObj[courseNumbers[i]][sectionNumbers[j]];
+            let DOWList = sectionObj[Object.keys(sectionObj)[0]].split();
+            let start = sectionObj[Object.keys(sectionObj)[1]];
+            let end = sectionObj[Object.keys(sectionObj)[2]];
+            let dayDoesMatch = false;
+            let timeDoesMatch = false;
+
+            DOWList.forEach(day => {
+                if (day == dayOfWeek) {
+                    dayDoesMatch = true;
+                }
+            });
+            if (timeStamp >= (start - gracePeriod) && timeStamp <= (end + gracePeriod)) {
+                timeDoesMatch = true;
+            }
+            if (dayDoesMatch && timeDoesMatch) {
+                return sectionObj;
+            }
+        }
+    }
+    return false;
+}
+
 const handlers = {
 
     'LaunchRequest': function () {
@@ -221,16 +292,16 @@ const handlers = {
                 });
                 if (!isMissingValue) {
                     console.log(JSON.stringify(row.values));
-                    profSchedule[scheduleSheet.properties.title][row.values[1].effectiveValue.stringValue.substr(0, 4)][row.values[1].effectiveValue.stringValue] = {
-                        "dayOfWeek": row.values[2].effectiveValue.stringValue,
-                        "start": row.values[3].effectiveValue.numberValue,
-                        "end": row.values[4].effectiveValue.numberValue
-                    };
+                    profSchedule[scheduleSheet.properties.title][row.values[1].effectiveValue.stringValue.substr(0, 4)]
+                        [row.values[1].effectiveValue.stringValue][headers.values[2].effectiveValue.stringValue] = row.values[2].effectiveValue.stringValue;
+                    profSchedule[scheduleSheet.properties.title][row.values[1].effectiveValue.stringValue.substr(0, 4)]
+                        [row.values[1].effectiveValue.stringValue][headers.values[3].effectiveValue.stringValue] = row.values[3].effectiveValue.stringValue;
+                    profSchedule[scheduleSheet.properties.title][row.values[1].effectiveValue.stringValue.substr(0, 4)]
+                        [row.values[1].effectiveValue.stringValue][headers.values[4].effectiveValue.stringValue] = row.values[4].effectiveValue.stringValue;
                 } else {
                     this.response.speak(speechOutput);
                     this.emit(':responseReady');
                 }
-                console.log(JSON.stringify(profSchedule));
             }
         });
 
