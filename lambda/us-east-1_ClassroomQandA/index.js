@@ -84,16 +84,16 @@ function checkSchedule(scheduleObj) {
     return false;
 }
 
-function getCurrentTime() {
-    let dateTime = Date(Date.now());
-    let dateTimeList = dateTime.split(' ');
-    return dateTimeList[4];
-}
-
 function getCurrentDay() {
     let dateTime = Date(Date.now());
     let dateTimeList = dateTime.split(' ');
     return dateTimeList[0];
+}
+
+function getCurrentTime() {
+    let dateTime = Date(Date.now());
+    let dateTimeList = dateTime.split(' ');
+    return dateTimeList[4];
 }
 
 function getCourseNumber(attributes, inSchedule) {
