@@ -103,7 +103,9 @@ function checkSchedule(scheduleObj) {
                 timeDoesMatch = true;
             }
             if (dayDoesMatch && timeDoesMatch) {
-                return sectionObj;
+                let returnObj = {};
+                returnObj[sectionNumbers[j]] = sectionObj;
+                return returnObj;
             }
         }
     }
@@ -112,13 +114,10 @@ function checkSchedule(scheduleObj) {
 
 let scheduleObj = googleSDK.readTab("1f_zgHHi8ZbS6j0WsIQpbkcpvhNamT2V48GuLc0odyJ0", "Schedule")
     .then(data => {
-        console.log(data);
         console.log(checkSchedule(data));
     })
     .catch(err => {
     });
-
-console.log(checkSchedule(sampleScheduleObj));
 
 const handlers = {
 
