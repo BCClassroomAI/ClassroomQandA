@@ -29,11 +29,9 @@ function convertTime(time) {
     return (hours / 24.0);
 }
 
-readTab("1f_zgHHi8ZbS6j0WsIQpbkcpvhNamT2V48GuLc0odyJ0", "Schedule");
+//readTab("1f_zgHHi8ZbS6j0WsIQpbkcpvhNamT2V48GuLc0odyJ0", "Schedule");
 
-async function readTab(key, tabName) {
-
-    let res = {};
+exports.readTab = async function (key, tabName) {
 
     let loadPromise = loadFromSheets();
     let auth = await loadPromise;
@@ -196,4 +194,4 @@ function getData(auth, key, tabName) {
     //   })
 }
 
-module.exports = readTab();
+// exports.readTab = readTab;
