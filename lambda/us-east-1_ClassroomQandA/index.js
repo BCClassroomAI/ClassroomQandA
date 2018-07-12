@@ -50,7 +50,7 @@ function convertTimeStamp(timeStamp) {
 }
 
 function checkSchedule(scheduleObj) {
-    let dayOfWeek = convertDayOfWeek(dateTimeList[0]);
+    let dayOfWeek = convertDayOfWeek(getCurrentDay());
     let timeStamp = convertTimeStamp(getCurrentTime());
     let courseNumbers = Object.keys(scheduleObj);
     let gracePeriod = 300/(3600 * 24);
@@ -90,6 +90,12 @@ function getCurrentTime() {
     return dateTimeList[4];
 }
 
+function getCurrentDay() {
+    let dateTime = Date(Date.now());
+    let dateTimeList = dateTime.split(' ');
+    return dateTimeList[0];
+}
+
 function getCourseNumber(attributes, inSchedule) {
     if (inSchedule) {
         let sectionNumber = Object.keys(inSchedule)[0];
@@ -102,9 +108,14 @@ function getCourseNumber(attributes, inSchedule) {
     return attributes.course;
 }
 
+let fakeObj = {
+    'attributes': {}
+};
+
 let scheduleObj = googleSDK.readTab("1f_zgHHi8ZbS6j0WsIQpbkcpvhNamT2V48GuLc0odyJ0", "Schedule")
     .then(data => {
         console.log(checkSchedule(data));
+        console.log(getCourseNumber(fakeObj.attributes, checkSchedule(data)));
     })
     .catch(err => {
     });
