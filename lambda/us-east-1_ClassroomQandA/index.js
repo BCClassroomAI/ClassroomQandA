@@ -49,33 +49,6 @@ function convertTimeStamp(timeStamp) {
 	return timeFraction;
 }
 
-let sampleScheduleObj = {
-    '1111': {
-        '111101': {
-            'dayOfWeek': 'TR',
-            'start': 0.4,
-            'end': 0.5
-        },
-        '111102': {
-            'dayOfWeek': 'TR',
-            'start': 0.55,
-            'end': 0.6
-        }
-    },
-    '2222': {
-        '222201': {
-            'dayOfWeek': 'MWF',
-            'start': 0.4375,
-            'end': 0.5
-        },
-        '222202': {
-            'dayOfWeek': 'MWF',
-            'start': 0.55,
-            'end': 0.6
-        }
-    }
-}
-
 function checkSchedule(scheduleObj) {
     let dateTime = Date(Date.now());
     let dateTimeList = dateTime.split(' ');
